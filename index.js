@@ -59,6 +59,26 @@ async function run() {
       res.send(result);
     });
 
+    app.put("/car/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updatedCar = req.body;
+      const car = {
+        $set: {
+          name: updatedCar.name,
+          brand: updatedCar.brand,
+          image: updatedCar.image,
+          price: updatedCar.price,
+          rating: updatedCar.rating,
+          description: updatedCar.description,
+          type: updatedCar.type,
+        },
+      };
+      const result = await carCollection.updateOne(filter, car, options);
+      res.send(result);
+    });
+
     //main codes end
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
