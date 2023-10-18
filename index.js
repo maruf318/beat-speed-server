@@ -30,6 +30,7 @@ async function run() {
     await client.connect();
     // main  codes start
     const carCollection = client.db("carsDB").collection("cars");
+    const cartCollection = client.db("cartDB").collection("cart");
 
     app.get("/brand/:name", async (req, res) => {
       const name = req.params.name;
@@ -76,6 +77,18 @@ async function run() {
         },
       };
       const result = await carCollection.updateOne(filter, car, options);
+      res.send(result);
+    });
+    //codes of cart
+    app.post("/cart", async (req, res) => {
+      const cart = req.body;
+      console.log(cart);
+      const result = await cartCollection.insertOne(cart);
+      res.send(result);
+    });
+    app.get("/cart", async (req, res) => {
+      const cursor = cartCollection.find();
+      const result = await cursor.toArray();
       res.send(result);
     });
 
