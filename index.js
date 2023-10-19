@@ -8,11 +8,7 @@ const port = process.env.PORT || 5000;
 //middleware
 app.use(cors());
 app.use(express.json());
-//beatSpeed
-//Ep3QUED5QmfxFIJy
 
-// const uri =
-//   "mongodb+srv://<username>:<password>@cluster0.ox9wd7x.mongodb.net/?retryWrites=true&w=majority";
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ox9wd7x.mongodb.net/?retryWrites=true&w=majority`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -27,14 +23,16 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
     // main  codes start
     const carCollection = client.db("carsDB").collection("cars");
     const cartCollection = client.db("cartDB").collection("cart");
 
     app.get("/brand/:name", async (req, res) => {
       const name = req.params.name;
+      // const nameU = name.toUpperCase;
       const query = { brand: name };
+
       const cursor = carCollection.find(query);
       const result = await cursor.toArray();
       res.send(result);
@@ -108,7 +106,7 @@ async function run() {
 
     //main codes end
     // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
     );
